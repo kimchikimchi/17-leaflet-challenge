@@ -60,6 +60,7 @@ d3.json(json_url, quakeData => {
     // Earthquakes with higher magnitudes should appear larger and earthquakes with greater depth should appear darker in color.
 
     // See https://leafletjs.com/examples/geojson/ for geoJson option details 
+    // console.log(quakeData);
 
     L.geoJson(quakeData, { 
         pointToLayer: function (feature, latlng) {
@@ -74,7 +75,12 @@ d3.json(json_url, quakeData => {
         },
         // Include popups that provide additional information about the earthquake when a marker is clicked.
         onEachFeature: function(feature, layer) {
-            layer.bindPopup(`${feature.properties.title}<hr>Coord: ${feature.geometry.coordinates}`);
+            const place = feature.properties.place;
+            const magnitude = feature.properties.mag;
+            const longitude = feature.geometry.coordinates[0].toPrecision(4);
+            const latitude = feature.geometry.coordinates[1].toPrecision(4);
+            const depth = feature.geometry.coordinates[2].toPrecision(3);
+            layer.bindPopup(`${place}<hr><b>Magnitude: ${magnitude}</b><br>Lon: ${longitude}<br>Lat: ${latitude}<br>Depth: ${depth}`);
         }
     }).addTo(layerGroup);
     // Add the earthquake layer
